@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Selamat datang</h1>
+    <h1>Berikut adalah semua pengguna kita</h1>
     <ul>
       <li v-for="item in users" :key="item.id">{{ item.deskripsi }}<button @click="hapus(item.id)">X</button></li>
     </ul>
