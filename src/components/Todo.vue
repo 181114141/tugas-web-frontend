@@ -19,7 +19,9 @@ export default {
     }
   },
   created: function() {
-    axios.get('http://localhost:3000/todo')
+    const username = localStorage.getItem('usr')
+    const password = localStorage.getItem('pwd')
+    axios.get('http://localhost:3000/todo', { headers: {username, password} })
     .then(result=>{
       this.todos = result.data
     })
@@ -27,11 +29,17 @@ export default {
   methods: {
     tambah: function() {
       const newItem = {deskripsi: this.myText}
-      axios.post('http://localhost:3000/todo', newItem)
-      this.todos.push(newItem)
+      const username = localStorage.getItem('usr')
+      const password = localStorage.getItem('pwd')
+      axios.post('http://localhost:3000/todo', newItem, { headers: {username, password} })
+      .then(()=> {
+        this.todos.push(newItem)
+      })
     },
     hapus: function(id) {
-      axios.delete(`http://localhost:3000/todo/${id}`)
+      const username = localStorage.getItem('usr')
+      const password = localStorage.getItem('pwd')
+      axios.delete(`http://localhost:3000/todo/${id}`, { headers: {username, password} })
       this.todos.splice(id-1, 1)
     }
   }
