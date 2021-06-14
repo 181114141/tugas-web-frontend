@@ -2,42 +2,55 @@
   <div>
     <h1>Berikut adalah semua pengguna kita</h1>
     <ul>
-      <li v-for="item in users" :key="item.id">{{ item.deskripsi }}<button @click="hapus(item.id)">X</button></li>
+      <li v-for="item in users" :key="item.id">
+        {{ item.username }}<button @click="hapus(item.id)">X</button>
+      </li>
     </ul>
-    <input v-model="username"/>
-    <input v-model="password"/>
+    <input v-model="username" />
+    <input v-model="password" />
     <button @click="tambah">Add</button>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 
-export default { 
+export default {
   data: function () {
     return {
       users: [],
-      username: '',
-      password: ''
-    }
+      username: "",
+      password: "",
+    };
   },
-  created: function() {
-    axios.get('http://localhost:3000/user')
-    .then(result=>{
-      this.users = result.data
-    })
+  created: function () {
+    const username = localStorage.getItem("usr");
+    const password = localStorage.getItem("pwd");
+    axios
+      .get("http://localhost:3000/user", { headers: { username, password } })
+      .then((result) => {
+        this.users = result.data;
+      });
   },
   methods: {
-    tambah: function() {
-      const newItem = {deskripsi: this.myText}
-      axios.post('http://localhost:3000/user', newItem)
-      this.users.push(newItem)
+    tambah: function () {
+      const newItem = { username: this.username, password: this.password };
+      const username = localStorage.getItem("usr");
+      const password = localStorage.getItem("pwd");
+      axios.post("http://localhost:3000/user", newItem, {
+        headers: { username, password },
+      });
+      this.users.push(newItem);
     },
-    hapus: function(id) {
-      axios.delete(`http://localhost:3000/user/${id}`)
-      this.users.splice(id-1, 1)
-    }
-  }
-}
+    hapus: function (id) {
+      const username = localStorage.getItem("usr");
+      const password = localStorage.getItem("pwd");
+      axios.delete(`http://localhost:3000/user/${id}`, {
+        headers: { username, password },
+      });
+      this.users.splice(id - 1, 1);
+    },
+  },
+};
 </script>
 
